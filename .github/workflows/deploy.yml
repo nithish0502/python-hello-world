@@ -38,14 +38,21 @@ jobs:
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         docker push $DOCKER_USERNAME/pythonapp:v2
-
-    - name: Deploy to server via SSH
+    
+    - name: Deploy to VM
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         HOST: ${{ secrets.SERVER_IP }}
         USER: ${{ secrets.SERVER_USER }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: |
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh -o StrictHostKeyChecking=no $USER@$HOST "docker pull $DOCKER_USERNAME/pythonapp:v2 && docker stop pythonapp-v2 || true && docker rm pythonapp-v2 || true && docker run -d -p 8082:8080 --name pythonapp-v2 $DOCKER_USERNAME/pythonapp:v2"
+    
+        ssh -o StrictHostKeyChecking=no $USER@$HOST "
+          docker pull $DOCKER_USERNAME/pythonapp:v2 &&
+          docker stop pythonapp-v2 || true &&
+          docker rm -f pythonapp-v2 || true &&
+          docker run -d -p 8082:8080 --name pythonapp-v2 $DOCKER_USERNAME/pythonapp:v2
+        "
