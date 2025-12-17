@@ -3,7 +3,13 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Hello from GCP Cloud Run! You’re deploying your first app 🚀"
-
+    return f"""
+    <html>
+    <body>
+        <h1>Hello from Python-Hello-World! You’re deploying your first app</h1>
+        <p>This is the latest version 1.1 deployed via Gunicorn + Nginx + HTTPS.</p>
+    </body>
+    </html>
+    """
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
