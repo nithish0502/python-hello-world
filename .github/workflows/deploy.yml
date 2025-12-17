@@ -24,7 +24,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Build Docker image
-      run: docker build --no-cache -t $DOCKER_USERNAME/pythonapp:v3 .
+      run: docker build --no-cache -t $DOCKER_USERNAME/pythonapp:v2 .
 
     - name: Run tests (optional)
       run: echo "Add tests here if any"
@@ -35,7 +35,7 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker push $DOCKER_USERNAME/pythonapp:v3
+        docker push $DOCKER_USERNAME/pythonapp:v2
 
     - name: Deploy to server via SSH
       env:
@@ -46,4 +46,4 @@ jobs:
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh -o StrictHostKeyChecking=no $USER@$HOST "docker pull $DOCKER_USERNAME/pythonapp:v3 && docker stop pythonapp-v3 || true && docker rm pythonapp-v3 || true && docker run -d -p 8082:8080 --name pythonapp-v3 $DOCKER_USERNAME/pythonapp:v3"
+        ssh -o StrictHostKeyChecking=no $USER@$HOST "docker pull $DOCKER_USERNAME/pythonapp:v2 && docker stop pythonapp-v2 || true && docker rm pythonapp-v2 || true && docker run -d -p 8082:8080 --name pythonapp-v2 $DOCKER_USERNAME/pythonapp:v2"
