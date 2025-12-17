@@ -24,6 +24,8 @@ jobs:
         pip install -r requirements.txt
 
     - name: Build Docker image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker build --no-cache -t $DOCKER_USERNAME/pythonapp:v2 .
 
     - name: Run tests (optional)
