@@ -7,7 +7,7 @@ def home():
     <html>
     <body>
         <h1>Hello from Python-Hello-World! You’re deploying your first app</h1>
-        <p>This is the latest version <span style="color:pink">2.0</span> deployed via Gunicorn + Docker + HTTPS.</p>
+        <p>This is the latest version <span style="color:blue">2.0</span> deployed via Gunicorn + Docker + HTTPS.</p>
     </body>
     </html>
     """
